@@ -1,16 +1,30 @@
-<!-- <p align="center">
-<img src="/src/frontend/static/icons/Hipster_HeroLogoMaroon.svg" width="300" alt="Online Boutique" />
-</p> -->
-![Continuous Integration](https://github.com/GoogleCloudPlatform/microservices-demo/workflows/Continuous%20Integration%20-%20Main/Release/badge.svg)
+<p align="center">
+<!-- <img src="src/frontend/static/icons/Hipster_HeroLogoCyan.svg" width="300" alt="Online Boutique" /> -->
+<img src="src/frontend/static/icons/Swagstore-Logo.svg" width="300" alt="Swagstore" />
+</p>
 
-**Online Boutique** is a cloud-first microservices demo application.  The application is a
-web-based e-commerce app where users can browse items, add them to the cart, and purchase them.
+## Release 0.5.0 - multiarch (amd and arm support)
+## Dec 2022
 
-Google uses this application to demonstrate how developers can modernize enterprise applications using Google Cloud products, including: [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine), [Cloud Service Mesh (CSM)](https://cloud.google.com/service-mesh), [gRPC](https://grpc.io/), [Cloud Operations](https://cloud.google.com/products/operations), [Spanner](https://cloud.google.com/spanner), [Memorystore](https://cloud.google.com/memorystore), [AlloyDB](https://cloud.google.com/alloydb), and [Gemini](https://ai.google.dev/). This application works on any Kubernetes cluster.
+<!-- ![Continuous Integration](https://github.com/GoogleCloudPlatform/microservices-demo/workflows/Continuous%20Integration%20-%20Main/Release/badge.svg) -->
+
+**Swagstore** is a fork of [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) which in turn is a cloud-first microservices demo application.
+
+The app consists of an 11-tier microservices application. The application is a
+web-based e-commerce app where users can browse items,
+add them to the cart, and purchase them.
+Swagstore is a slightly modified version from the original [Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo). In fact, items on the Swagstore are actually Datadog swags.
+It is a ficticious ecommerce swag store, don't expect to receive swags :grinning:
+
+**Google uses this application to demonstrate use of technologies like
+Kubernetes/GKE, Istio, Stackdriver, and gRPC**. This application
+works on any Kubernetes cluster, as well as Google
+Kubernetes Engine. It’s **easy to deploy with little to no configuration**.
+
+**At Datadog we use the app to experiment with APM, Tracing Libraries, Admission Controller and auto injection.
+It is perfect as a playground if you want to play and instrument the microservices written in multiple languages.**
 
 If you’re using this demo, please **★Star** this repository to show your interest!
-
-**Note to Googlers:** Please fill out the form at [go/microservices-demo](http://go/microservices-demo).
 
 ## Architecture
 
