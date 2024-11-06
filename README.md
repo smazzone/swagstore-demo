@@ -28,8 +28,9 @@ If you’re using this demo, please **★Star** this repository to show your int
 
 ## Architecture
 
-**Online Boutique** is composed of 11 microservices written in different
-languages that talk to each other over gRPC.
+**Swagstore** is composed of 11 microservices written in different
+languages that talk to each other over gRPC. See the [Development Principles](/docs/development-principles.md) doc for more information.
+
 
 [![Architecture of
 microservices](/docs/img/architecture-diagram.png)](/docs/img/architecture-diagram.png)
