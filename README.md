@@ -4,7 +4,7 @@
 </p>
 
 ## Release 0.5.0 - multiarch (amd and arm support)
-## Dec 2022
+## Nov 2024
 
 <!-- ![Continuous Integration](https://github.com/GoogleCloudPlatform/microservices-demo/workflows/Continuous%20Integration%20-%20Main/Release/badge.svg) -->
 
