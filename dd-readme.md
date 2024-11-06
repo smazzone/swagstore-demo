@@ -30,6 +30,7 @@ Single Step Instrumentation does NOT instrument applications in the namespace wh
 
 Create datadog-agent.yaml with the spec of your Datadog Agent deployment configuration. The simplest configuration is as follows:
 
+```
 apiVersion: datadoghq.com/v2alpha1
 kind: DatadogAgent
 metadata:
@@ -88,6 +89,7 @@ spec:
           http:
             enabled: true
             endpoint: 0.0.0.0:4318
+```
 
 Let us deploy the cluster agent 
 
