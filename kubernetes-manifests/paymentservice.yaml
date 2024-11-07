@@ -60,6 +60,8 @@ spec:
           value: "50051"
         - name: DISABLE_PROFILER
           value: "1"
+        - name: DD_PROFILING_ENABLED
+          value: "true"
         readinessProbe:
           grpc:
             port: 50051

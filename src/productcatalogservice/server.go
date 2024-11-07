@@ -25,11 +25,11 @@ import (
 	"syscall"
 	"time"
 
+	profilerold "cloud.google.com/go/profiler"
 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/productcatalogservice/genproto"
 	"google.golang.org/grpc/credentials/insecure"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 
-	"cloud.google.com/go/profiler"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"go.opentelemetry.io/otel"
@@ -39,6 +39,7 @@ import (
 	"google.golang.org/grpc"
 	grpctrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/google.golang.org/grpc"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
+	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
 )
 
 var (
@@ -76,6 +77,24 @@ func main() {
 	} else {
 		log.Info("Tracing disabled.")
 	}
+
+	err := profiler.Start(
+		profiler.WithProfileTypes(
+			profiler.CPUProfile,
+			profiler.HeapProfile,
+
+			// The profiles below are disabled by
+			// default to keep overhead low, but
+			// can be enabled as needed.
+			// profiler.BlockProfile,
+			// profiler.MutexProfile,
+			// profiler.GoroutineProfile,
+		),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer profiler.Stop()
 
 	if os.Getenv("DISABLE_PROFILER") == "" {
 		log.Info("Profiling enabled.")
@@ -186,7 +205,7 @@ func initTracing() error {
 
 func initProfiling(service, version string) {
 	for i := 1; i <= 3; i++ {
-		if err := profiler.Start(profiler.Config{
+		if err := profilerold.Start(profilerold.Config{
 			Service:        service,
 			ServiceVersion: version,
 			// ProjectID must be set if not running on GCP.

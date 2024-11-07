@@ -51,5 +51,6 @@ ENV DD_INTEGRATIONS=/opt/datadog/integrations.json
 ENV LD_PRELOAD=/opt/datadog/linux-arm64/Datadog.Linux.ApiWrapper.x64.so
 ENV DD_PROFILING_ENABLED=1
 ENV DD_TRACE_DEBUG=0
+ENV DD_RUNTIME_METRICS_ENABLED=true
 USER 1000
 ENTRYPOINT ["dotnet", "cartservice.dll"]

@@ -18,6 +18,9 @@ spec:
         keyName: app-key
   override:
     nodeAgent:
+      image:
+        name: agent
+        tag: 7.58.0
       containers:
         trace-agent:
           env:

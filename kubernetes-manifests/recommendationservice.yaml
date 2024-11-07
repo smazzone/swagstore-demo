@@ -72,6 +72,8 @@ spec:
           value: "1"
         - name: DD_TRACE_REMOVE_INTEGRATION_SERVICE_NAMES_ENABLED
           value: "true"
+        - name: DD_PROFILING_ENABLED
+          value: "true"
         resources:
           requests:
             cpu: 100m

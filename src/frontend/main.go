@@ -21,7 +21,7 @@ import (
 	"os"
 	"time"
 
-	"cloud.google.com/go/profiler"
+	profilerold "cloud.google.com/go/profiler"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
@@ -33,6 +33,7 @@ import (
 	grpctrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/google.golang.org/grpc"
 	muxtrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/gorilla/mux"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
+	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
 )
 
 const (
@@ -103,6 +104,24 @@ func main() {
 		TimestampFormat: time.RFC3339Nano,
 	}
 	log.Out = os.Stdout
+
+	err := profiler.Start(
+		profiler.WithProfileTypes(
+			profiler.CPUProfile,
+			profiler.HeapProfile,
+
+			// The profiles below are disabled by
+			// default to keep overhead low, but
+			// can be enabled as needed.
+			// profiler.BlockProfile,
+			// profiler.MutexProfile,
+			// profiler.GoroutineProfile,
+		),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer profiler.Stop()
 
 	svc := new(frontendServer)
 
@@ -199,7 +218,7 @@ func initProfiling(log logrus.FieldLogger, service, version string) {
 	// since they are not sharing packages.
 	for i := 1; i <= 3; i++ {
 		log = log.WithField("retry", i)
-		if err := profiler.Start(profiler.Config{
+		if err := profilerold.Start(profilerold.Config{
 			Service:        service,
 			ServiceVersion: version,
 			// ProjectID must be set if not running on GCP.
@@ -235,7 +254,6 @@ func mustConnGRPC(ctx context.Context, conn **grpc.ClientConn, addr string) {
 	// 	grpc.WithInsecure(),
 	// 	grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor()),
 	// 	grpc.WithStreamInterceptor(otelgrpc.StreamClientInterceptor()))
-
 	*conn, err = grpc.DialContext(ctx, addr,
 		grpc.WithInsecure(),
 		grpc.WithUnaryInterceptor(ui),

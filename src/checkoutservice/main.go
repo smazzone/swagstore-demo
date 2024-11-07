@@ -21,7 +21,7 @@ import (
 	"os"
 	"time"
 
-	"cloud.google.com/go/profiler"
+	profilerold "cloud.google.com/go/profiler"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -38,6 +38,7 @@ import (
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	grpctrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/google.golang.org/grpc"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
+	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
 )
 
 const (
@@ -94,6 +95,24 @@ func main() {
 	} else {
 		log.Info("Tracing disabled.")
 	}
+
+	err := profiler.Start(
+		profiler.WithProfileTypes(
+			profiler.CPUProfile,
+			profiler.HeapProfile,
+
+			// The profiles below are disabled by
+			// default to keep overhead low, but
+			// can be enabled as needed.
+			// profiler.BlockProfile,
+			// profiler.MutexProfile,
+			// profiler.GoroutineProfile,
+		),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer profiler.Stop()
 
 	if os.Getenv("ENABLE_PROFILER") == "1" {
 		log.Info("Profiling enabled.")
@@ -189,7 +208,7 @@ func initProfiling(service, version string) {
 	// TODO(ahmetb) this method is duplicated in other microservices using Go
 	// since they are not sharing packages.
 	for i := 1; i <= 3; i++ {
-		if err := profiler.Start(profiler.Config{
+		if err := profilerold.Start(profilerold.Config{
 			Service:        service,
 			ServiceVersion: version,
 			// ProjectID must be set if not running on GCP.
