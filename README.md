@@ -4,7 +4,7 @@
 </p>
 
 ## Release v0.10.1
-## Nov 2024
+## March 2025
 
 <!-- ![Continuous Integration](https://github.com/GoogleCloudPlatform/microservices-demo/workflows/Continuous%20Integration%20-%20Main/Release/badge.svg) -->
 
