@@ -32,9 +32,11 @@ spec:
         tags.datadoghq.com/env: "ssi-dev"
         tags.datadoghq.com/service: "paymentservice"
         tags.datadoghq.com/version: "1.0"
-        admission.datadoghq.com/enabled: "true"      
-      annotations:
-        admission.datadoghq.com/js-lib.version: "v5.24.0"
+      # use these two lines if you want to use admission controller
+      # comment them out if you don't want to use admission controller and use SSI
+      #   admission.datadoghq.com/enabled: "true"      
+      # annotations:
+      #   admission.datadoghq.com/js-lib.version: "v5.38.0"
     spec:
       serviceAccountName: paymentservice
       terminationGracePeriodSeconds: 5

@@ -32,9 +32,11 @@ spec:
         tags.datadoghq.com/env: "ssi-dev"
         tags.datadoghq.com/service: "emailservice"
         tags.datadoghq.com/version: "1.0"
-        admission.datadoghq.com/enabled: "true"
-      annotations:
-        admission.datadoghq.com/python-lib.version: "v2.11.7"
+      # use these two lines if you want to use admission controller
+      # comment them out if you don't want to use admission controller and use SSI
+      #   admission.datadoghq.com/enabled: "true"
+      # annotations:
+      #   admission.datadoghq.com/python-lib.version: "v2.12.0"
     spec:
       serviceAccountName: emailservice
       terminationGracePeriodSeconds: 5

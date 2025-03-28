@@ -17,10 +17,13 @@ spec:
         secretName: datadog-secret
         keyName: app-key
   override:
+    clusterAgent:
+      image:
+        #we use this version of the agent to make sure we could use the new SSI features
+        tag: 7.64.1
     nodeAgent:
       image:
-        name: agent
-        tag: 7.58.0
+        tag: 7.64.1
       containers:
         trace-agent:
           env:
@@ -28,27 +31,58 @@ spec:
               value: "true"
             - name: DD_APM_PEER_TAGS_AGGREGATION
               value: "true"
+        agent:
+          env:
+            - name: "DD_IGNORE_AUTOCONF"
+              value: "kube_controller_manager kube_scheduler etcd"
   features:
-    admissionController:
+    #comment out these the following lines if you want to swtich back and use admission controller instead of SSI
+    # admissionController:
+    #   enabled: true
+    #   mutateUnlabelled: false
+    apm:
       enabled: true
-      mutateUnlabelled: false
-    # apm:
-    #   instrumentation:
-    #     enabled: false
-        # enabledNamespaces: # Add namespaces to instrument
-        # - default
-        # libVersions:
-        #   java: "1.39.1"
-        #   dotnet: "3.3.1"
-        #   python: "2.11.7"
-        #   js: "5.23.1"
-        #   ruby: "2"
+      #comment out these lines if you want admission controller to use hostip instead of UDS
+      hostPortConfig:
+        enabled: true
+      unixDomainSocketConfig:
+        enabled: false
+      #comment out these lines if you want to use SSI instead of admission controller
+      instrumentation:
+        enabled: true
+        targets:
+          - name: "my target namespace"
+            namespaceSelector:
+              matchNames:
+                - "default"
+            ddTraceVersions:
+              java: "1.47.3"
+              dotnet: "3.13.0"
+              python: "3.3.0"
+              js: "5.45.0"
     logCollection:
       enabled: true
       containerCollectAll: true
     remoteConfiguration:
       enabled: true
+    # clusterChecks:
+    #   enabled: true
+    #   useClusterChecksRunners: true
+    #comment out these lines if you want to configure dogstatsd to use UDP instead of UDS
+    dogstatsd:
+      hostPortConfig:
+        enabled: true
+      unixDomainSocketConfig:
+        enabled: false
+    eventCollection:
+      collectKubernetesEvents: true
+    liveContainerCollection:
+      enabled: true
     liveProcessCollection:
+      enabled: true
+    npm:
+      collectDNSStats: true
+      enableConntrack: true
       enabled: true
     otlp:
       receiver:

@@ -31,6 +31,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 
 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/frontend/genproto"
 	"github.com/GoogleCloudPlatform/microservices-demo/src/frontend/money"
@@ -106,7 +107,6 @@ func (fe *frontendServer) homeHandler(w http.ResponseWriter, r *http.Request) {
 	log.Debugf("ENV_PLATFORM is: %s", env)
 	plat = platformDetails{}
 	plat.setPlatformDetails(strings.ToLower(env))
-
 	if err := templates.ExecuteTemplate(w, "home", injectCommonTemplateData(r, map[string]interface{}{
 		"show_currency": true,
 		"currencies":    currencies,
@@ -194,7 +194,6 @@ func (fe *frontendServer) productHandler(w http.ResponseWriter, r *http.Request)
 			fmt.Println("Failed to obtain product's packaging info:", err)
 		}
 	}
-
 	if err := templates.ExecuteTemplate(w, "product", injectCommonTemplateData(r, map[string]interface{}{
 		"ad":              fe.chooseAd(r.Context(), p.Categories, log),
 		"show_currency":   true,
@@ -232,7 +231,7 @@ func (fe *frontendServer) addToCartHandler(w http.ResponseWriter, r *http.Reques
 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to add to cart"), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("location", baseUrl + "/cart")
+	w.Header().Set("location", baseUrl+"/cart")
 	w.WriteHeader(http.StatusFound)
 }
 
@@ -244,7 +243,7 @@ func (fe *frontendServer) emptyCartHandler(w http.ResponseWriter, r *http.Reques
 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to empty cart"), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("location", baseUrl + "/")
+	w.Header().Set("location", baseUrl+"/")
 	w.WriteHeader(http.StatusFound)
 }
 
@@ -302,7 +301,6 @@ func (fe *frontendServer) viewCartHandler(w http.ResponseWriter, r *http.Request
 	}
 	totalPrice = money.Must(money.Sum(totalPrice, *shippingCost))
 	year := time.Now().Year()
-
 	if err := templates.ExecuteTemplate(w, "cart", injectCommonTemplateData(r, map[string]interface{}{
 		"currencies":       currencies,
 		"recommendations":  recommendations,
@@ -388,7 +386,6 @@ func (fe *frontendServer) placeOrderHandler(w http.ResponseWriter, r *http.Reque
 		renderHTTPError(log, r, w, errors.Wrap(err, "could not retrieve currencies"), http.StatusInternalServerError)
 		return
 	}
-
 	if err := templates.ExecuteTemplate(w, "order", injectCommonTemplateData(r, map[string]interface{}{
 		"show_currency":   false,
 		"currencies":      currencies,
@@ -406,7 +403,6 @@ func (fe *frontendServer) assistantHandler(w http.ResponseWriter, r *http.Reques
 		renderHTTPError(log, r, w, errors.Wrap(err, "could not retrieve currencies"), http.StatusInternalServerError)
 		return
 	}
-
 	if err := templates.ExecuteTemplate(w, "assistant", injectCommonTemplateData(r, map[string]interface{}{
 		"show_currency": false,
 		"currencies":    currencies,
@@ -423,7 +419,7 @@ func (fe *frontendServer) logoutHandler(w http.ResponseWriter, r *http.Request) 
 		c.MaxAge = -1
 		http.SetCookie(w, c)
 	}
-	w.Header().Set("Location", baseUrl + "/")
+	w.Header().Set("Location", baseUrl+"/")
 	w.WriteHeader(http.StatusFound)
 }
 
@@ -561,6 +557,8 @@ func injectCommonTemplateData(r *http.Request, payload map[string]interface{}) m
 		"frontendMessage":   frontendMessage,
 		"currentYear":       time.Now().Year(),
 		"baseUrl":           baseUrl,
+		"dd_trace_id":       getActiveSpanTraceID(r),
+		"dd_trace_time":     getTraceTime(),
 	}
 
 	for k, v := range payload {
@@ -568,6 +566,18 @@ func injectCommonTemplateData(r *http.Request, payload map[string]interface{}) m
 	}
 
 	return data
+}
+
+func getActiveSpanTraceID(r *http.Request) string {
+	span, _ := tracer.SpanFromContext(r.Context())
+	if span != nil {
+		return strconv.FormatUint(span.Context().TraceID(), 10)
+	}
+	return ""
+}
+
+func getTraceTime() string {
+	return strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)
 }
 
 func currentCurrency(r *http.Request) string {
@@ -632,4 +642,24 @@ func stringinSlice(slice []string, val string) bool {
 		}
 	}
 	return false
+}
+
+func (fe *frontendServer) testHandler(w http.ResponseWriter, r *http.Request) {
+	log := r.Context().Value(ctxKeyLog{}).(logrus.FieldLogger)
+	log.Debug("rendering test template")
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "*, Content-Type, x-requested-with, access-control-allow-origin, access-control-allow-headers, x-datadog-trace-id, x-datadog-parent-id, x-datadog-origin, x-datadog-sampling-priority")
+
+	// w.Header().Set("Access-Control-Allow-Origin", "*")
+	// w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
+	// w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, X-CSRF-Token, Authorization, X-Requested-With")
+
+	if err := templates.ExecuteTemplate(w, "test", injectCommonTemplateData(r, map[string]interface{}{
+		"message": "This is a test page",
+	})); err != nil {
+		log.Error(err)
+	}
 }

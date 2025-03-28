@@ -24,7 +24,6 @@ import (
 	profilerold "cloud.google.com/go/profiler"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/propagation"
@@ -183,15 +182,17 @@ func main() {
 	r.HandleFunc(baseUrl+"/_healthz", func(w http.ResponseWriter, _ *http.Request) { fmt.Fprint(w, "ok") })
 	r.HandleFunc(baseUrl+"/product-meta/{ids}", svc.getProductByID).Methods(http.MethodGet)
 	r.HandleFunc(baseUrl+"/bot", svc.chatBotHandler).Methods(http.MethodPost)
+	r.HandleFunc(baseUrl+"/test", svc.testHandler).Methods(http.MethodGet, http.MethodPost, http.MethodOptions)
 
 	var handler http.Handler = r
-	handler = &logHandler{log: log, next: handler}     // add logging
-	handler = ensureSessionID(handler)                 // add session ID
-	handler = otelhttp.NewHandler(handler, "frontend") // add OTel tracing
+	handler = &logHandler{log: log, next: handler} // add logging
+	handler = ensureSessionID(handler)             // add session ID
+	// handler = otelhttp.NewHandler(handler, "frontend") // add OTel tracing
 
 	log.Infof("starting server on " + addr + ":" + srvPort)
 	log.Fatal(http.ListenAndServe(addr+":"+srvPort, handler))
 }
+
 func initStats(log logrus.FieldLogger) {
 	// TODO(arbrown) Implement OpenTelemtry stats
 }

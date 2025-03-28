@@ -32,9 +32,11 @@ spec:
         tags.datadoghq.com/env: "ssi-dev"
         tags.datadoghq.com/service: "adservice"
         tags.datadoghq.com/version: "1.0"
-        admission.datadoghq.com/enabled: "true"
-      annotations:
-        admission.datadoghq.com/java-lib.version: "v1.39.1"
+      # use these two lines if you want to use admission controller
+      # comment them out if you don't want to use admission controller and use SSI
+      #   admission.datadoghq.com/enabled: "true"
+      # annotations:
+      #   admission.datadoghq.com/java-lib.version: "v1.40.0"
     spec:
       serviceAccountName: adservice
       terminationGracePeriodSeconds: 5
@@ -58,12 +60,16 @@ spec:
         env:
         - name: PORT
           value: "9555"
+        - name: DISABLE_STATS
+          value: "1"
         - name: DISABLE_TRACING
-          value: "true"
+          value: "1"
+        - name: DISABLE_PROFILER
+          value: "1"
         - name: DD_PROFILING_ENABLED
-          value: "true"
+          value: "false"
         - name: DD_DYNAMIC_INSTRUMENTATION_ENABLED
-          value: "true"
+          value: "false"
         resources:
           requests:
             cpu: 200m
@@ -72,13 +78,13 @@ spec:
             cpu: 300m
             memory: 600Mi
         readinessProbe:
-          initialDelaySeconds: 20
-          periodSeconds: 15
+          initialDelaySeconds: 40
+          periodSeconds: 30
           grpc:
             port: 9555
         livenessProbe:
-          initialDelaySeconds: 20
-          periodSeconds: 15
+          initialDelaySeconds: 40
+          periodSeconds: 30
           grpc:
             port: 9555
 ---

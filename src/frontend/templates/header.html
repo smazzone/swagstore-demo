@@ -22,6 +22,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    {{ if $.dd_trace_id }}
+    <meta name="dd-trace-id" content="{{ $.dd_trace_id }}">
+    {{ end }}
+
+    {{ if $.dd_trace_time }}
+    <meta name="dd-trace-time" content="{{ $.dd_trace_time }}">
+    {{ end }}
+ 
     <title>
         {{ if $.is_cymbal_brand }}
         Cymbal Shops
@@ -44,6 +53,46 @@
     {{ else }}
     <link rel='shortcut icon' type='image/x-icon' href='{{ $.baseUrl }}/static/favicon.ico' />
     {{ end }}
+    <script>
+        (function(h,o,u,n,d) {
+          h=h[d]=h[d]||{q:[],onReady:function(c){h.q.push(c)}}
+          d=o.createElement(u);d.async=1;d.src=n
+          n=o.getElementsByTagName(u)[0];n.parentNode.insertBefore(d,n)
+        })(window,document,'script','https://www.datadoghq-browser-agent.com/us1/v5/datadog-rum.js','DD_RUM')
+        window.DD_RUM.onReady(function() {
+          window.DD_RUM.init({
+            clientToken: 'pubca364139f030031c513897fa7dc42f64',
+            applicationId: 'cbe6e2f2-4d39-4b23-915e-a6daafb85dd3',
+            // `site` refers to the Datadog site parameter of your organization
+            // see https://docs.datadoghq.com/getting_started/site/
+            site: 'datadoghq.com',
+            service: 'swagstore',
+            env: 'ssi-dev',
+            // Specify a version number to identify the deployed version of your application in Datadog
+            version: '1.0.0',
+            //allowedTracingUrls: ["http://localhost", /http:\/\/.*\localhost.*/, (url) => url.startsWith("http://localhost")],
+            //allowedTracingUrls: [{ match: "http://localhost", propagatorTypes: ["datadog","tracecontext"]}],
+            allowedTracingUrls: ['https://dummyjson.com','http://localhost'],
+            // allowedTracingUrls: [   
+            //     (url) => { console.log('allowedTracingUrls', url); return true; },
+            //     // { match: "http://localhost", propagatorTypes: ["datadog", "tracecontext"] },
+            //     { match: "https://dummyjson.com" }
+            // ],            
+            traceSampleRate: 100,
+            telemetrySampleRate: 100,
+            sessionSampleRate: 100,
+            sessionReplaySampleRate: 100,
+            trackUserInteractions: true,
+            trackResources: true,
+            trackLongTasks: true,
+            defaultPrivacyLevel: 'allow',
+            //startSessionReplayRecordingManually: true,
+            startSessionReplayRecordingManually: false,
+          });
+          //window.DD_RUM.startSessionReplayRecording(); 
+        })
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>

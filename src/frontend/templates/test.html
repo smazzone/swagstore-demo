@@ -1,0 +1,42 @@
+{{ define "test" }}
+
+{{ template "header" . }}
+<script>
+        function fetchProduct() {
+                const randomInt = Math.floor(Math.random() * 30) + 1;
+                console.log("Random Int: ", randomInt);
+                fetch(`https://dummyjson.com/products/${randomInt}`, {
+                                method: 'GET',
+                                mode: 'cors',
+                                headers: {
+                                                'Content-Type': 'application/json; charset=utf-8',
+                                                'Access-Control-Allow-Origin': '*',
+                                                'Access-Control-Allow-Methods': 'GET',
+                                                'Access-Control-Allow-Headers': '*, Content-Type, x-requested-with, access-control-allow-origin, access-control-allow-headers, x-datadog-trace-id, x-datadog-parent-id, x-datadog-origin, x-datadog-sampling-priority',
+                                }
+                })
+                .then(response => response.json())
+                .then(data => {
+                        const productDiv = document.getElementById("product");
+                        productDiv.innerHTML = `
+                                <p>${data.title}</p>
+                                <p>Description: ${data.description}</p>
+                                <p>Price: $${data.price}</p>
+                        `;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+</script>
+
+<h1>
+        {{.message}}        
+</h1>
+
+<a href="javascript:void(0);" id="fetchProductLink" onclick="fetchProduct()">Fetch Product</a>
+        
+<div id="product"></div>
+
+
+{{ template "footer" . }}
+    
+{{end}}
