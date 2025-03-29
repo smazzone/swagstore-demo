@@ -31,7 +31,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: false
-        image: gcr.io/ms-demo-369609/currencyservice:v0.10.1-7-g26a0370
+        image: gcr.io/ms-demo-369609/currencyservice:v0.10.1-11-g9c728b3
         ports:
         - name: grpc
           containerPort: 7000
@@ -203,7 +203,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: false
-        image: gcr.io/ms-demo-369609/productcatalogservice:v0.10.1-7-g26a0370
+        image: gcr.io/ms-demo-369609/productcatalogservice:v0.10.1-11-g9c728b3
         ports:
         - containerPort: 3550
         env:
@@ -275,7 +275,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: false
-          image: gcr.io/ms-demo-369609/checkoutservice:v0.10.1-7-g26a0370
+          image: gcr.io/ms-demo-369609/checkoutservice:v0.10.1-11-g9c728b3
           ports:
           - containerPort: 5050
           readinessProbe:
@@ -359,7 +359,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: false
-        image: gcr.io/ms-demo-369609/shippingservice:v0.10.1-7-g26a0370
+        image: gcr.io/ms-demo-369609/shippingservice:v0.10.1-11-g9c728b3
         ports:
         - containerPort: 50051
         env:
@@ -433,7 +433,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: false
-        image: gcr.io/ms-demo-369609/cartservice:v0.10.1-7-g26a0370
+        image: gcr.io/ms-demo-369609/cartservice:v0.10.1-11-g9c728b3
         ports:
         - containerPort: 7070
         env:
@@ -578,7 +578,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: false
-        image: gcr.io/ms-demo-369609/emailservice:v0.10.1-7-g26a0370
+        image: gcr.io/ms-demo-369609/emailservice:v0.10.1-11-g9c728b3
         ports:
         - containerPort: 8080
         env:
@@ -655,7 +655,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: false
-        image: gcr.io/ms-demo-369609/paymentservice:v0.10.1-7-g26a0370
+        image: gcr.io/ms-demo-369609/paymentservice:v0.10.1-11-g9c728b3
         ports:
         - containerPort: 50051
         env:
@@ -731,7 +731,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: false
-          image: gcr.io/ms-demo-369609/frontend:v0.10.1-7-g26a0370
+          image: gcr.io/ms-demo-369609/frontend:v0.10.1-11-g9c728b3
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -860,7 +860,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: false
-        image: gcr.io/ms-demo-369609/recommendationservice:v0.10.1-7-g26a0370
+        image: gcr.io/ms-demo-369609/recommendationservice:v0.10.1-11-g9c728b3
         ports:
         - containerPort: 8080
         readinessProbe:
@@ -941,7 +941,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: false
-        image: gcr.io/ms-demo-369609/adservice:v0.10.1-7-g26a0370
+        image: gcr.io/ms-demo-369609/adservice:v0.10.1-11-g9c728b3
         ports:
         - containerPort: 9555
         env:
