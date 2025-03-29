@@ -3,7 +3,7 @@
 <img src="src/frontend/static/icons/Swagstore-Logo.svg" width="300" alt="Swagstore" />
 </p>
 
-## Release v0.10.1
+## Release v0.10.3
 ## March 2025
 
 ## As of end of March 2025 I do not actively maintain this repo, remember this repo is purely for education purposes.
