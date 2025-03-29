@@ -6,6 +6,8 @@
 ## Release v0.10.1
 ## March 2025
 
+## As of end of March 2025 I do not actively maintain this repo, remember this repo is purely for education purposes.
+
 <!-- ![Continuous Integration](https://github.com/GoogleCloudPlatform/microservices-demo/workflows/Continuous%20Integration%20-%20Main/Release/badge.svg) -->
 
 **Swagstore** is a fork of [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) which in turn is a cloud-first microservices demo application.
@@ -25,6 +27,7 @@ Kubernetes Engine. It’s **easy to deploy with little to no configuration**.
 It is perfect as a playground if you want to play and instrument the microservices written in multiple languages.**
 
 If you’re using this demo, please **★Star** this repository to show your interest!
+
 
 ## Architecture
 
