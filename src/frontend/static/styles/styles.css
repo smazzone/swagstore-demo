@@ -576,8 +576,10 @@ similar to that of the hot-products-row.
 }
 
 .recommendations img {
-  height: 100%;
+  display: block;
   width: 100%;
+  max-width: 100%;
+  height: auto;
   border-radius: 20% 0 20% 20%;
 }
 
